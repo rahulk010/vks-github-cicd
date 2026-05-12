@@ -28,7 +28,7 @@ jobs:
           # Setup kubectl to talk to your PRIVATE API IP
           # Use the IP you've been using (e.g., 172.26.0.3 or your Load Balancer IP)
           kubectl config set-cluster github-test-cluster \
-            --server=https:192.168.22.15.:6443 \
+            --server=https:192.168.22.15:6443 \
             --insecure-skip-tls-verify=true
 
           kubectl config set-credentials github-user --token=$JWT_TOKEN
