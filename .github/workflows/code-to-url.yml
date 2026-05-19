@@ -52,4 +52,4 @@ jobs:
       - name: Deploy helm char
         run: |
           echo "Deploying Helm chart to VKS cluster"
-          helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./values-vks-agents.yaml
+          helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./helm-charts-repo/values-vks-agents.yaml
