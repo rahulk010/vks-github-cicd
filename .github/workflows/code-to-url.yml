@@ -53,6 +53,14 @@ jobs:
         run: |
           echo "Deploying Helm chart to VKS cluster"
           helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./helm-charts-repo/values-vks-agents.yaml
+          
+      # Install envsubst    
+      - name: Install envsubst (gettext)
+        run: |
+          if ! command -v envsubst &> /dev/null; then
+            echo "envsubst not found, installing..."
+            sudo apt-get update && sudo apt-get install -y gettext
+          fi
 
       # Generate dynamic istio routing
       - name: Generate Dynamic Istio Routing
@@ -60,7 +68,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         run: |
           # Replace placeholders in template and output a deployable file
-          envsbust < ./istio-preview-template.yaml > ./rendered-istio-routing.yaml
+          envsubst < ./istio-preview-template.yaml > ./rendered-istio-routing.yaml
           echo "Rendered Manifest Preview
           cat ./rendered-istio-routing.yaml
 
