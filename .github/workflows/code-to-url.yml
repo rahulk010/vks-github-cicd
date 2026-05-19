@@ -66,11 +66,17 @@ jobs:
       # Generate dynamic istio routing
       - name: Generate Dynamic Istio Routing
         env:
-          PR_NUMBER: ${{ github.event.number || 'main' }}
+          #PR_NUMBER: ${{ github.event.number || 'main' }}
+          PR_NUMBER: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || 'main' }}
         run: |
           # Replace placeholders in template and output a deployable file
           envsubst < ./istio-preview-template.yaml > ./rendered-istio-routing.yaml
           echo "==Rendered Manifest Preview=="
           cat ./rendered-istio-routing.yaml
 
+      # Apply dynamic routing to VKS cluster
+      - name: Apply Dynamic Istio Routing
+        run: |
+          echo "Applying dynamic Ingress & Routing to VKS cluster..."
+          kubectl apply -f ./rendered-istio-routing.yaml
       
