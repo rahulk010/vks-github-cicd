@@ -66,11 +66,11 @@ jobs:
       # Generate dynamic istio routing
       - name: Generate Dynamic Istio Routing
         env:
-          PR_NUMBER: ${{ github.event.number }}
+          PR_NUMBER: ${{ github.event.number || 'main' }}
         run: |
           # Replace placeholders in template and output a deployable file
           envsubst < ./istio-preview-template.yaml > ./rendered-istio-routing.yaml
-          echo "Rendered Manifest Preview"
+          echo "==Rendered Manifest Preview=="
           cat ./rendered-istio-routing.yaml
 
       
