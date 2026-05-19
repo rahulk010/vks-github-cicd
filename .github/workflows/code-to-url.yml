@@ -15,9 +15,18 @@ jobs:
   kube-test:
     runs-on: self-hosted  # This matches the label you just created
     steps:
+      # Checkout the CURRENT repository (where this workflow lives)
       - name: Checkout Code
         uses: actions/checkout@v4
-
+        
+      # Checkout the PUBLIC helm-charts repository
+      - name: Checkout Public Helm Charts Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/helm-charts
+          path: helm-charts-repo # Clones it into a subdirectory so it doesn't overwrite your code
+          
+      # Authenticate with Kubernetes via OIDC
       - name: Get GitHub OIDC Token
         run: |
           # Exchange the internal request for a real JWT
@@ -38,3 +47,9 @@ jobs:
           # This will likely fail with a 403 at first—this is GOOD!
           echo "Testing connection to Private API..."
           kubectl get nodes
+
+      # Deploy using helm
+      - name: Deploy helm char
+        run: |
+          echo "Deploying Helm chart to VKS cluster"
+          helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./values-vks-agents.yaml
