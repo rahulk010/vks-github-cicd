@@ -52,6 +52,7 @@ jobs:
       - name: Deploy helm chart
         run: |
           echo "Deploying Helm chart to VKS cluster"
+          export GODEBUG=http2client=0
           helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./helm-charts-repo/values-vks-agents.yaml
           
       # Install envsubst    
@@ -69,7 +70,7 @@ jobs:
         run: |
           # Replace placeholders in template and output a deployable file
           envsubst < ./istio-preview-template.yaml > ./rendered-istio-routing.yaml
-          echo "Rendered Manifest Preview
+          echo "Rendered Manifest Preview"
           cat ./rendered-istio-routing.yaml
 
       
