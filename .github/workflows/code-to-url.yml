@@ -79,4 +79,40 @@ jobs:
         run: |
           echo "Applying dynamic Ingress & Routing to VKS cluster..."
           kubectl apply -f ./rendered-istio-routing.yaml
+
+      # Native Github Feedback Loop
+      - name: Post Live URL Feedback
+        uses: actions/github-scrip@v7
+        with:
+          script: |
+            // 1. Calculate the dynamic URL based on the event type
+            const isPR = context.eventName === 'pull_request';
+            const identifier = isPR ? `pr-${context.issue.number}` : 'main';
+            const liveUrl = `http://${identifier}.sfo.rainpole.io`;
+            
+            // 2. Build a markdown comment block
+            const commentBody = `### Deployment Successful to VKS!\n\n` +
+                                `Your changes have been deployed to your ephemeral preview environment.\n\n` +
+                                `* **Live URL:** [${liveUrl}](${liveUrl})\n` +
+                                `* **Environment Context:** \`${identifier}\`\n\n` +
+                                `_To view full execution logs or debug network failures, click on the **Actions** tab above._`;
+
+            // 3. Post to PR timeline if it's a pull request
+            if (isPR) {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody
+              });
+            } else {
+              // 4. Fallback: Post to the Commit timeline if it's a direct push to main
+              await github.rest.repos.createCommitComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: context.sha,
+                body: commentBody
+              });
+            }
+          
       
