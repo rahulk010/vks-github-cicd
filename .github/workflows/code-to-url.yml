@@ -82,7 +82,7 @@ jobs:
 
       # Native Github Feedback Loop
       - name: Post Live URL Feedback
-        uses: actions/github-scrip@v7
+        uses: actions/github-script@v8
         with:
           script: |
             // 1. Calculate the dynamic URL based on the event type
