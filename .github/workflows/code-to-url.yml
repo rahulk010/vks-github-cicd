@@ -89,7 +89,7 @@ jobs:
           script: |
             // 1. Calculate the dynamic URL based on the event type
             const isPR = context.eventName === 'pull_request';
-            const identifier = isPR ? `pr-${context.issue.number}` : 'main';
+            const identifier = isPR ? `pr-${context.issue.number}` : 'pr-main';
             const liveUrl = `http://${identifier}.sfo.rainpole.io`;
             
             // 2. Build a markdown comment block
