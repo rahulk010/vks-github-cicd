@@ -55,7 +55,7 @@ jobs:
         run: |
           echo "Deploying Helm chart to VKS cluster"
           export GODEBUG=http2client=0
-          helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./helm-charts-repo/values-vks-agents.yaml
+          helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./helm-charts-repo/values-vks-agents.yaml --history-max 5
           
       # Install envsubst    
       - name: Install envsubst (gettext)
