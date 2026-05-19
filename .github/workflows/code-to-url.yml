@@ -49,7 +49,19 @@ jobs:
           kubectl get nodes
 
       # Deploy using helm
-      - name: Deploy helm char
+      - name: Deploy helm chart
         run: |
           echo "Deploying Helm chart to VKS cluster"
           helm upgrade --install demo-app ./helm-charts-repo/ --namespace default --values ./helm-charts-repo/values-vks-agents.yaml
+
+      # Generate dynamic istio routing
+      - name: Generate Dynamic Istio Routing
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          # Replace placeholders in template and output a deployable file
+          envsbust < ./istio-preview-template.yaml > ./rendered-istio-routing.yaml
+          echo "Rendered Manifest Preview
+          cat ./rendered-istio-routing.yaml
+
+      
