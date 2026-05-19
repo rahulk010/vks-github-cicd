@@ -12,7 +12,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "pr-${PR_NUMBER}.dev.internal.company.com"
+    - "pr-${PR_NUMBER}.sfo.rainpole.io"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -21,7 +21,7 @@ metadata:
   namespace: default
 spec:
   hosts:
-  - "pr-${PR_NUMBER}.dev.internal.company.com"
+  - "pr-${PR_NUMBER}.sfo.rainpole.io"
   gateways:
   - app-gateway-pr-${PR_NUMBER}
   http:
