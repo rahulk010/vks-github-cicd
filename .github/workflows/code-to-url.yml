@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
-          tags: ${{ vars..DOCKERHUB_USERNAME }}/go-todo-app:${{ github.sha }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/go-todo-app:${{ github.sha }}
           
       # Authenticate with Kubernetes via OIDC
       - name: Get GitHub OIDC Token
