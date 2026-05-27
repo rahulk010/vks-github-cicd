@@ -67,7 +67,7 @@ jobs:
           helm upgrade --install todo-app ./helm-charts/ \
             --namespace default \
             --values ./helm-charts/values.yaml \
-            --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/go-todo-app \
+            --set image.repository=${{ vars.DOCKERHUB_USERNAME }}/go-todo-app \
             --set image.tag=${{ github.sha }} \
             --set env.todoPassword=${{ secrets.TODO_PASSWORD }} \
             --history-max 5
