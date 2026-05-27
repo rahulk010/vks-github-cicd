@@ -30,6 +30,6 @@ spec:
         prefix: /
     route:
     - destination:
-        host: frontend.default.svc.cluster.local # 👈 Exact FQDN routing
+        host: todo-app.default.svc.cluster.local 
         port:
           number: 80
