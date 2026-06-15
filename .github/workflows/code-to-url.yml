@@ -14,6 +14,7 @@ permissions:
   contents: write # required to write comments on commits ( pushes to main )
   pull-requests: write # required to post comments on Pull requests
   statuses: write # required to post commit status updates
+  packages: write # required to push to github packages/GHCR
 
 jobs:
   build-image:
@@ -36,14 +37,15 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v4
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push
         uses: docker/build-push-action@v7
         with:
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/go-todo-app:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
     
   deploy-app:
     runs-on: self-hosted
@@ -80,10 +82,12 @@ jobs:
           echo "Deploying Helm chart to VKS cluster"
           echo "Deploying version ${{ github.sha }} to VKS cluster"
           export GODEBUG=http2client=0
+          export IMAGE_REPO="ghcr.io/${{ github.repository }}"
+          export IMAGE_REPO_LOWER=$(echo "$IMAGE_REPO" | tr '[:upper:]' '[:lower:]')
           helm upgrade --install todo-app ./helm-charts/ \
             --namespace default \
             --values ./helm-charts/values.yaml \
-            --set image.repository=${{ vars.DOCKERHUB_USERNAME }}/go-todo-app \
+            --set image.repository=$IMAGE_REPO_LOWER \
             --set image.tag=${{ github.sha }} \
             --set env.todoPassword=${{ secrets.TODO_PASSWORD }} \
             --history-max 5
