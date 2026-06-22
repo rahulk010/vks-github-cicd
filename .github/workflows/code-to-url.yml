@@ -142,6 +142,7 @@ jobs:
         with:
           script: |
             // Calculate the dynamic URL based on the event type
+            const deployStatus = "{{ needs.deploy-app.result }}";
             const isPR = context.eventName === 'pull_request';
             const identifier = isPR ? `pr-${context.issue.number}` : 'main';
             const liveUrl = `http://${identifier}.sfo.rainpole.io`;
