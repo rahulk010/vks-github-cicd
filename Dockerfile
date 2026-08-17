@@ -1,8 +1,11 @@
-FROM golang:1.22.2 as builder
+# --- Builder Stage ---
+FROM golang:1.22.2 AS builder
 
 WORKDIR /app
 
 COPY . .
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc libc6-dev \
@@ -10,14 +13,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN go mod download
 
+# Build with CGO enabled (single clean build step)
 RUN CGO_ENABLED=1 GOOS=linux go build -o main .
 
-ENV CGO_ENABLED=1
-ENV GOOS=linux
-
-RUN go build -o main .
-
+# --- Runner Stage ---
 FROM ubuntu:latest
+
+# Prevent interactive prompts from freezing apt-get updates/installs
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
