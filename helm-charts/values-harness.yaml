@@ -13,8 +13,10 @@ replicaCount: 1
 #   # Overrides the image tag whose default is the chart appVersion.
 #   tag: "Sunkz3XJQ1C5wYYYvXj6JQ"
 
-image: <+artifact.image>
-
+image:
+  repository: <+artifact.image.imagePath>
+  tag: <+artifact.image.tag>
+  
 env:
   #todoPort: 7540
   #todoDbFile: scheduler.db
