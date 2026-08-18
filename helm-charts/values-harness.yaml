@@ -13,7 +13,7 @@ replicaCount: 1
 #   # Overrides the image tag whose default is the chart appVersion.
 #   tag: "Sunkz3XJQ1C5wYYYvXj6JQ"
 
-image: <+artifacts.primary.image>
+image: <+artifact.image>
 
 env:
   #todoPort: 7540
