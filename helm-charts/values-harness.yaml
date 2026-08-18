@@ -6,16 +6,16 @@
 replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
-# image:
-#   repository: design-libraries-docker-dev-local.packages.vcfd.broadcom.net/todoservice
-#   # This sets the pull policy for images.
-#   pullPolicy: IfNotPresent
-#   # Overrides the image tag whose default is the chart appVersion.
-#   tag: "Sunkz3XJQ1C5wYYYvXj6JQ"
-
 image:
-  repository: <+artifact.image.imagePath>
-  tag: <+artifact.image.tag>
+   repository: design-libraries-docker-dev-local.packages.vcfd.broadcom.net/todoapp
+   # This sets the pull policy for images.
+   pullPolicy: IfNotPresent
+   # Overrides the image tag whose default is the chart appVersion.
+   tag: <+artifact.image>
+
+# image:
+#   repository: <+artifact.image.imagePath>
+#   tag: <+artifact.image.tag>
   
 env:
   #todoPort: 7540
